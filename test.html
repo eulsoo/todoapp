@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="eulsoo" v-bind:title="mess">
+    <ol>
+        <todo-item 
+            v-for="item in todo"
+            v-bind:item="item"
+            v-bind:key="item.id"
+            v-bind:foo.sync="bar"
+            v-on:paint="paintColor"
+        > 
+        <!-- 
+            자식컴포넌트의 공간을 만든다. 
+            위 v-속성들은 자식 컴포넌트 공간에서 필요한 일들을 한다. 
+        -->
+        </todo-item>
+    </ol>
+
+    <input type="text" v-model="mess" />
+    <child-2 :mess="mess" ></child-2>
+</div>
+<script>
+
+Vue.component('todo-item', {
+  // 이제 todo-item 컴포넌트는 "prop" 이라고 하는
+  // 사용자 정의 속성 같은 것을 입력받을 수 있습니다.
+  // 이 prop은 todo라는 이름으로 정의했습니다.
+  props: ['item', 'foo'],
+  template: '<li v-on:click="paintColor">{{ item.text }} {{ foo }}</li>',
+  data: function() {
+      return {
+          eulsoo: 'hi'
+      }
+  },
+  methods: {
+      paintColor: function() {
+          this.$emit('paint', 'red');
+          this.$emit('update:foo', 'bule');
+          bus.$emit('compSend', 1);
+      }
+  }
+});
+
+var 자식2 = {
+    template: '<div>자식2 정의 컴포넌트 입니다! {{ mess }}</div>',
+    props: ['mess'],
+    created: function() {
+        bus.$on('compSend', function (id) {
+            console.log('받았다' + id);
+        })
+    }
+}
+
+var bus = new Vue();
+
+var app = new Vue({
+    el: '#eulsoo',
+    data: {
+        mess: '안녕하세요.',
+        todo: [
+            { id: 0, text: 'Vegetables' },
+            { id: 1, text: 'Cheese' },
+            { id: 2, text: 'Whatever ' }
+        ],
+        bar: 'foo로 전달되는 bar'
+    },
+    methods: {
+        paintColor: function(color) {
+            console.log(color);
+        }
+    },
+    components: {
+        'child-2': 자식2
+    }
+});
+
+
+
+</script>
+</body>
+</html>

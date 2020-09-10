@@ -4,58 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>vue todo</title>
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
 <div id="app">
     <h1>Todo App</h1>
-    <input type="text" v-model="inputText" v-on:keyup.enter="addItem">
-    <button v-on:click="addItem">add</button>
+    <input type="text" v-model="inputText"/>
+    <button v-on:click="addItem">추가</button>
+
     <ul>
         <li v-for="(item, index) in todoItems">
             {{ item }}
-            <button v-on:click="removeItem(item, index)">삭젠</button>
+            <button v-on:click="removeItem(item, index)">삭제</button>
         </li>
     </ul>
+
+    
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
 <script>
 new Vue({
-    el:'#app',
+    el: '#app',
     data: {
-        inputText: '',
+        inputText:'',
         todoItems: []
     },
     methods: {
-        addItem: function(event) {
-            // if (event.keyCode === 13) {
-            //     var value = this.inputText;
-            //     // axios.post('주소', this.inputText);
-            //     localStorage.setItem(value, value); // 저장
-            //     this.inputText = ''; // 인풋비우기
-            // }
-
-            var value = this.inputText;
-            // axios.post('주소', this.inputText);
-            localStorage.setItem(value, value); // 저장
-            this.inputText = ''; // 인풋비우기
-            this.todoItems.push(value);
-        },
-        fetchItems: function() {
-            for (var i = 0; i < localStorage.length; i++) {
-                var value = localStorage.key(i);
-                this.todoItems.push(value);
-                console.log(value); 
-            }
+        addItem: function() {
+            var 값 = this.inputText;
+            console.log(this.inputText)
+            localStorage.setItem(값 , 값);
+            this.inputText = '';
+            this.todoItems.push(값);
+            console.log(this.todoItems);
+            
         },
         removeItem: function(item, index) {
-            console.log(item, index);
-            this.todoItems.splice(index, 1);
             localStorage.removeItem(item);
+            this.todoItems.splice(index, 1)
         }
-    },
-    created: function() {
-        this.fetchItems();
     }
 });
 </script>
